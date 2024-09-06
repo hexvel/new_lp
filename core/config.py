@@ -3,10 +3,10 @@ from service.user import UserService
 
 
 class DB_DATA:
-    HOST = "185.128.106.51"
-    NAME = "new_lp"
-    USER = "hexvel"
-    PASSWORD = "Hexvel789**$"
+    HOST = "..."
+    NAME = "..."
+    USER = "..."
+    PASSWORD = "..."
 
 
 class CONTROLLER:
