@@ -2,8 +2,7 @@ from models.user import UserModel
 from service.user import UserService
 
 
-class DB_DATA:
-    HOST = "localhost"
+class DB_DATA: ...
 
 
 class CONTROLLER:
