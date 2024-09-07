@@ -2,11 +2,7 @@ from models.user import UserModel
 from service.user import UserService
 
 
-class DB_DATA:
-    HOST = "..."
-    NAME = "..."
-    USER = "..."
-    PASSWORD = "..."
+class DB_DATA: ...
 
 
 class CONTROLLER:
