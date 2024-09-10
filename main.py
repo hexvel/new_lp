@@ -1,36 +1,36 @@
 from fastapi import FastAPI
 from loguru import logger
+from services.user import UserService
 from tortoise import Tortoise
 
-from core.config import CONTROLLER, DB_DATA
-from models.db_user import User
-from service.user import UserService
+from core.config import TORTOISE_ORM, Settings
+from models.user_pydantic import User
 
 logger.disable("vkbottle")
 
 
 async def lifespan(app: FastAPI):
-    await Tortoise.init(
-        db_url=f"mysql://{DB_DATA.USER}:{DB_DATA.PASSWORD}@{DB_DATA.HOST}/{DB_DATA.NAME}",
-        modules={"models": ["models.db_user"]},
-    )
+    await Tortoise.init(TORTOISE_ORM)
     await Tortoise.generate_schemas()
 
     users = await User.all()
+
     for user in users:
-        service = UserService(user=user, controller=CONTROLLER)
-
+        service = UserService(user)
         await service.initialize()
-        service.controller.set_user(user.user_id, service)
-        await service.controller.start_user(user.user_id)
 
-    logger.success("Database connection successful")
+        Settings.set_user(user.id, service)
+        logger.warning(f"User {user.id} loaded")
+        await Settings.start_user(user.id)
+        logger.success(f"User {user.id} started")
 
     yield
     await Tortoise.close_connections()
+    logger.error("FastAPI shutting down...")
 
 
 app = FastAPI(lifespan=lifespan)
+
 
 if __name__ == "__main__":
     import uvicorn

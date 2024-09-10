@@ -1,15 +1,16 @@
-from typing import Any, Coroutine, Union
+from tortoise import fields
+from tortoise.models import Model
 
-from pydantic import BaseModel
+
+class User(Model):
+    id = fields.IntField(pk=True)
+    balance = fields.FloatField(default=0.0)
+    token = fields.TextField(null=True)
+    username = fields.TextField(default="Unknown")
+    prefix = fields.TextField(default="ня")
+    script_prefix = fields.TextField(default="ск")
+    admin_prefix = fields.TextField(default="адм")
 
 
-class UserModel(BaseModel):
-    user_id: Union[int, None] = None
-    token: Union[str, None] = None
-
-    @property
-    async def start_user(self) -> Coroutine[Any, Any, None]: ...
-    @property
-    async def restart_user(self) -> Coroutine[Any, Any, None]: ...
-    @property
-    async def stop_user(self) -> Coroutine[Any, Any, None]: ...
+# class Script(Model):
+#     user_id = fields.IntField(pk=True)
